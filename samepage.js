@@ -18,7 +18,7 @@ app.route('/').get(function (req, res) {
   res.send("Hello Samepage");
 });
 
-var handler = function (req, res) {
+var pageHandler = function (req, res) {
   res.write("req.method = " + req.method + "\n");
   res.write("req.url =" + req.url + "\n");
   res.write("req.query = " + JSON.stringify(req.query) + "\n");
@@ -27,8 +27,13 @@ var handler = function (req, res) {
   res.end();
 };
 
-app.route('/page').all(handler);
-app.route('/page/:id').all(handler);
+app.route('/page').all(pageHandler);
+app.route('/page/:id').all(pageHandler);
+
+app.route('/eval').post(function(req, res) {
+  var result = eval(req.body.exp);
+  res.send(JSON.stringify(result));
+});
 
 app.listen(port);
 console.log("connect to: http://localhost:" + port);

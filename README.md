@@ -7,7 +7,7 @@ $ node samepage.js
 connect to: http://localhost:3000
 ```
 
-curl
+/page
 
 ```
 $ curl http://localhost:3000
@@ -32,3 +32,9 @@ req.body = {}
 req.params = {"id":"1"}
 ```
 
+/eval
+
+```
+$ curl http://localhost:3000/eval --data-urlencode exp="1+1"
+2
+```
