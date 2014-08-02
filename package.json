@@ -1,0 +1,23 @@
+{
+  "name": "samepage",
+  "version": "0.0.0",
+  "description": "Let me make sure we are on the Samepage",
+  "main": "samepage.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anglee/samepage.git"
+  },
+  "author": "Ang Lee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anglee/samepage/issues"
+  },
+  "homepage": "https://github.com/anglee/samepage",
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "express": "~4.7.2"
+  }
+}
