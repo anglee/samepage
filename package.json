@@ -18,6 +18,8 @@
   "homepage": "https://github.com/anglee/samepage",
   "dependencies": {
     "lodash": "~2.4.1",
-    "express": "~4.7.2"
+    "express": "~4.7.2",
+    "cors": "~2.4.1",
+    "body-parser": "~1.5.2"
   }
 }
