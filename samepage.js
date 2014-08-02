@@ -1,18 +1,30 @@
 var express = require("express");
+var socketio  = require('socket.io');
 var cors = require("cors");
 var bodyParser = require("body-parser");
-var port = 3000;
+
 var app = express();
+var port = 3000;
+var server = app.listen(port);
+console.log("connect to: http://localhost:" + port);
+
+var io = socketio.listen(server);
+
+setInterval(function() {
+  var now = new Date().toUTCString();
+  io.sockets.send(now);
+}, 1000);
+app.use('/clock', express.static('public'));
 
 app.use(cors());
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 // parse application/vnd.api+json as json
-app.use(bodyParser.json({ type: 'application/vnd.api+json' }))
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 app.route('/').get(function (req, res) {
   res.send("Hello Samepage");
@@ -35,5 +47,5 @@ app.route('/eval').post(function(req, res) {
   res.send(JSON.stringify(result));
 });
 
-app.listen(port);
-console.log("connect to: http://localhost:" + port);
+
+
