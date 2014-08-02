@@ -39,5 +39,7 @@ $ curl http://localhost:3000/eval --data-urlencode exp="1+1"
 2
 ```
 
+
 /clock
+
 open `http://localhost:3000/clock/index.html` in browser.
