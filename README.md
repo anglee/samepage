@@ -40,6 +40,6 @@ $ curl http://localhost:3000/eval --data-urlencode exp="1+1"
 ```
 
 
-/clock
+/app
 
-open `http://localhost:3000/clock/index.html` in browser.
+open `http://localhost:3000/app/index.html` in 2 browsers.
