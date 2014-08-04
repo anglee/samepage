@@ -1,17 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="MyApp">
 <head lang="en">
   <meta charset="UTF-8">
   <title></title>
   <script src="bower_components/socket.io-client/socket.io.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
   <script>
-    var socket = io.connect('http://localhost:3000');
-    socket.on('message', function (time) {
-      document.getElementById('time').innerHTML = time;
+    var app = angular.module("MyApp", []);
+    app.controller("MyCtrl", function($scope, $http) {
+      $scope.code = "1+1";
+      $scope.result = "";
+      $scope.eval = function() {
+        $http.post("/eval", JSON.stringify({exp: $scope.code}));
+      };
+
+      var socket = io.connect('http://localhost:3000');
+      socket.on('eval_finish', function (ret) {
+        ret = JSON.parse(ret);
+        $scope.code = ret.exp;
+        $scope.result = ret.result;
+        $scope.$apply();
+      });
+
     });
   </script>
 </head>
 <body>
+<div>
   Current server time is: <b><span id="time"></span></b>
+</div>
+<div ng-controller="MyCtrl">
+  <input ng-model="code" /><button ng-click="eval()">Eval</button>
+  <div>{{ result }}</div>
+</div>
 </body>
 </html>

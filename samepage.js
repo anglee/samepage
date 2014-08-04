@@ -10,12 +10,6 @@ console.log("connect to: http://localhost:" + port);
 
 var io = socketio.listen(server);
 
-setInterval(function() {
-  var now = new Date().toUTCString();
-  io.sockets.send(now);
-}, 1000);
-app.use('/clock', express.static('public'));
-
 app.use(cors());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -44,8 +38,10 @@ app.route('/page/:id').all(pageHandler);
 
 app.route('/eval').post(function(req, res) {
   var result = eval(req.body.exp);
-  res.send(JSON.stringify(result));
+  io.sockets.emit("eval_finish", JSON.stringify({
+    exp: req.body.exp,
+    result: result
+  }));
 });
 
-
-
+app.use('/app', express.static('public'));
