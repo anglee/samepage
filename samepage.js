@@ -1,11 +1,22 @@
+var traceur = require("traceur");
+var traceur_filter = function(filename) {
+  // don't transpile our dependencies, just our app
+  var shouldCompile = filename.indexOf('node_modules') === -1;
+  if (shouldCompile) {
+    console.log("tracer compile", filename);
+  }// else {
+//    console.log("tracer does NOT compile", filename);
+//  }
+  return shouldCompile;
+};
+var traceur_options = {
+  experimental: true
+};
+traceur.require.makeDefault(traceur_filter, traceur_options);
 var express = require("express");
 var socketio  = require('socket.io');
 var cors = require("cors");
 var bodyParser = require("body-parser");
-
-var traceur = require("traceur");
-traceur.options.experimental = true;
-traceur.require.makeDefault();
 var homepageHandler = require("./es6-homepagehandler").homepageHandler;
 
 var app = express();
