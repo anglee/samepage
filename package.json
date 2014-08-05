@@ -21,6 +21,7 @@
     "express": "~4.7.2",
     "cors": "~2.4.1",
     "body-parser": "~1.5.2",
-    "socket.io": "~1.0.6"
+    "socket.io": "~1.0.6",
+    "traceur": "0.0.55"
   }
 }
