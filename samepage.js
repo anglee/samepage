@@ -50,12 +50,30 @@ var pageHandler = function (req, res) {
 app.route('/page').all(pageHandler);
 app.route('/page/:id').all(pageHandler);
 
+var evaluate = function(req) {
+  var promise = new Promise(function(resolve, reject) {
+    var result = eval(req.body.exp);
+    resolve({
+      exp: req.body.exp,
+      result: result
+    });
+  });
+  return promise;
+};
+
+var deliver = function(evalObj) {
+  io.sockets.emit("eval_finish", JSON.stringify(evalObj));
+};
+
 app.route('/eval').post(function(req, res) {
-  var result = eval(req.body.exp);
-  io.sockets.emit("eval_finish", JSON.stringify({
-    exp: req.body.exp,
-    result: result
-  }));
+  evaluate(req).then(deliver).catch(function(error) {
+    console.log("eval failed", error);
+  });
 });
 
 app.use('/app', express.static('public'));
+
+//Promise.resolve() will create a promise that resolves to whatever value you give it
+Promise.resolve("Hello Promise").then(function(it) {
+  console.log(it);
+});
