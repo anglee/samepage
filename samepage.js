@@ -14,6 +14,11 @@ var traceur_options = {
 };
 traceur.require.makeDefault(traceur_filter, traceur_options);
 var express = require("express");
+var https = require('https');
+var http = require('http');
+var fs = require('fs');
+var inspect = require('util').inspect;
+
 var socketio  = require('socket.io');
 var cors = require("cors");
 var bodyParser = require("body-parser");
@@ -21,10 +26,23 @@ var homepageHandler = require("./es6-homepagehandler").homepageHandler;
 
 var app = express();
 var port = 3000;
-var server = app.listen(port);
+
+// Create an HTTP service.
+//var server = app.listen(port);
+var httpServer = http.createServer(app).listen(port);
 console.log("connect to: http://localhost:" + port);
 
-var io = socketio.listen(server);
+// This line is from the Node.js HTTPS documentation.
+var options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('Key-cert.pem')
+};
+console.log(inspect(options));
+
+// Create an HTTPS service identical to the HTTP service.
+var httpsServer = https.createServer(options, app).listen(3001);
+
+var io = socketio.listen(httpServer);
 
 app.use(cors());
 // parse application/x-www-form-urlencoded

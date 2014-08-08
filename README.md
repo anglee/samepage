@@ -43,3 +43,21 @@ $ curl http://localhost:3000/eval --data-urlencode exp="1+1"
 /app
 
 open `http://localhost:3000/app/index.html` in 2 browsers.
+
+
+======
+# HTTPS
+
+```
+openssl genrsa 1024 > key.pem
+openssl req -x509 -new -key key.pem > key-cert.pem
+```
+
+## Reference
+
+https://en.wikipedia.org/wiki/HTTP_Secure
+
+http://nodejs.org/api/https.html#https_https
+
+http://expressjs.com/api.html#app.listen
+
