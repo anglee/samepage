@@ -24,7 +24,8 @@
           }
         });
       });
-      var socket = io.connect('http://localhost:3000');
+
+      var socket = io.connect(window.location.origin);
       socket.on('eval_finish', function (ret) {
         ret = JSON.parse(ret);
         $scope.code = ret.exp;

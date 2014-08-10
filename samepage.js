@@ -25,24 +25,30 @@ var bodyParser = require("body-parser");
 var homepageHandler = require("./es6-homepagehandler").homepageHandler;
 
 var app = express();
-var port = 3000;
+var httpPort = 3000;
+var httpsPort = 3001;
 
 // Create an HTTP service.
 //var server = app.listen(port);
-var httpServer = http.createServer(app).listen(port);
-console.log("connect to: http://localhost:" + port);
+var httpServer = http.createServer(app).listen(httpPort, function() {
+  console.log("connect to: http://localhost:" + httpPort);
+});
+
 
 // This line is from the Node.js HTTPS documentation.
 var options = {
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('Key-cert.pem')
 };
-console.log(inspect(options));
+//console.log(inspect(options));
 
 // Create an HTTPS service identical to the HTTP service.
-var httpsServer = https.createServer(options, app).listen(3001);
+var httpsServer = https.createServer(options, app).listen(httpsPort, function() {
+  console.log("connect to: https://localhost:" + httpsPort);
+});
 
 var io = socketio.listen(httpServer);
+var sio = socketio.listen(httpsServer);
 
 app.use(cors());
 // parse application/x-www-form-urlencoded
@@ -79,11 +85,13 @@ var evaluate = function(req) {
   return promise;
 };
 
-var deliver = function(evalObj) {
-  io.sockets.emit("eval_finish", JSON.stringify(evalObj));
-};
-
 app.route('/eval').post(function(req, res) {
+
+  var deliver = function(evalObj) {
+    var deliverer = req.connection.encrypted ? sio : io;
+    deliverer.sockets.emit("eval_finish", JSON.stringify(evalObj));
+  };
+
   evaluate(req).then(deliver).catch(function(error) {
     console.log("eval failed", error);
   });
